@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI vs Human Speed Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000000;
+            color: #e0e6ed;
+            padding: 4rem 2rem;
+        }
+        
+        /* Background effect matching main site */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 136, 255, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .demo-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .demo-tag {
+            display: inline-block;
+            color: #0088ff;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .demo-header h2 {
+            font-size: 2.5rem;
+            color: #ffffff;
+            margin-bottom: 1rem;
+        }
+        
+        .demo-header p {
+            font-size: 1.1rem;
+            color: #6b8daf;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Explainer Section */
+        .explainer-section {
+            background: rgba(0, 136, 255, 0.05);
+            border: 1px solid rgba(0, 136, 255, 0.2);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .explainer-section h3 {
+            color: #0088ff;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .explainer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .explainer-item {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .explainer-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 136, 255, 0.15);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .explainer-icon.safe {
+            background: rgba(74, 222, 128, 0.15);
+        }
+        
+        .explainer-icon.threat {
+            background: rgba(239, 68, 68, 0.15);
+        }
+        
+        .explainer-icon.review {
+            background: rgba(251, 191, 36, 0.15);
+        }
+        
+        .explainer-content h4 {
+            color: #ffffff;
+            font-size: 0.95rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .explainer-content p {
+            color: #6b8daf;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+        
+        /* Comparison Grid */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .processor-card {
+            background: rgba(0, 136, 255, 0.03);
+            border: 1px solid rgba(0, 136, 255, 0.2);
+            border-radius: 8px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        
+        .processor-card:hover {
+            background: rgba(0, 136, 255, 0.05);
+        }
+        
+        .processor-card.ai {
+            border-color: rgba(0, 136, 255, 0.3);
+        }
+        
+        .processor-card.human {
+            border-color: rgba(0, 136, 255, 0.3);
+        }
+        
+        .processor-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #0088ff, transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .processor-card:hover::before {
+            opacity: 1;
+        }
+        
+        .processor-header {
+            margin-bottom: 2rem;
+        }
+        
+        .processor-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            color: #0088ff;
+            margin-bottom: 0.5rem;
+        }
+        
+        .processor-title {
+            font-size: 1.5rem;
+            color: #ffffff;
+        }
+        
+        .processor-description {
+            color: #6b8daf;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-top: 0.5rem;
+        }
+        
+        /* Stats Display */
+        .stats-display {
+            margin-bottom: 2rem;
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 136, 255, 0.1);
+        }
+        
+        .stat-label {
+            color: #6b8daf;
+            font-size: 0.9rem;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            color: #0088ff;
+        }
+        
+        .stat-value.small {
+            font-size: 1.2rem;
+        }
+        
+        /* Progress Bars */
+        .progress-container {
+            margin-top: 2rem;
+        }
+        
+        .progress-label {
+            color: #6b8daf;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 136, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #0088ff, #00d4ff);
+        }
+        
+        /* Visual Alert Feed */
+        .alert-feed {
+            height: 200px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 136, 255, 0.2);
+            border-radius: 4px;
+            padding: 1rem;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.75rem;
+            margin-top: 1rem;
+        }
+        
+        .alert-feed-label {
+            color: #6b8daf;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .alert-item {
+            padding: 0.3rem 0;
+            opacity: 0;
+            animation: fadeIn 0.3s forwards;
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        .alert-item.safe {
+            color: #4ade80;
+        }
+        
+        .alert-item.threat {
+            color: #ef4444;
+        }
+        
+        .alert-item.review {
+            color: #fbbf24;
+        }
+        
+        /* Control Button */
+        .demo-controls {
+            text-align: center;
+            margin: 3rem 0;
+        }
+        
+        .start-button {
+            padding: 1.2rem 3rem;
+            background: transparent;
+            border: 2px solid #0088ff;
+            color: #0088ff;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .start-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: #0088ff;
+            transition: left 0.3s;
+            z-index: -1;
+        }
+        
+        .start-button:hover:not(:disabled) {
+            color: #000000;
+            box-shadow: 0 0 30px rgba(0, 136, 255, 0.5);
+        }
+        
+        .start-button:hover:not(:disabled)::before {
+            left: 0;
+        }
+        
+        .start-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Results Section */
+        .results-section {
+            background: linear-gradient(135deg, rgba(0, 136, 255, 0.08) 0%, rgba(0, 136, 255, 0.02) 100%);
+            border: 1px solid rgba(0, 136, 255, 0.2);
+            border-radius: 8px;
+            padding: 3rem;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s;
+        }
+        
+        .results-section.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .results-section h3 {
+            font-size: 2rem;
+            color: #ffffff;
+            margin-bottom: 1rem;
+        }
+        
+        .results-section p {
+            font-size: 1.1rem;
+            color: #6b8daf;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        .key-insight {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: rgba(0, 136, 255, 0.2);
+            border-radius: 6px;
+            color: #0088ff;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .explainer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="demo-header">
+            <div class="demo-tag">// Interactive Demo</div>
+            <h2>AI vs Human: Speed Comparison</h2>
+            <p>Watch how AI and human analysts work together to protect against cybersecurity threats. Each brings unique strengths to create the perfect defense.</p>
+        </div>
+        
+        <!-- Explainer Section -->
+        <div class="explainer-section">
+            <h3>How This Works</h3>
+            <p style="color: #6b8daf; margin-bottom: 1.5rem;">In a real Security Operations Center (SOC), thousands of alerts come in every second. Here's what you'll see when you run the simulation:</p>
+            
+            <div class="explainer-grid">
+                <div class="explainer-item">
+                    <div class="explainer-icon">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 2L2 7L10 12L18 7L10 2Z" stroke="#0088ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 13L10 18L18 13" stroke="#0088ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="explainer-content">
+                        <h4>Alerts Processed</h4>
+                        <p>Security events detected across the network - could be logins, file changes, network traffic, etc.</p>
+                    </div>
+                </div>
+                
+                <div class="explainer-item">
+                    <div class="explainer-icon safe">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 10L9 12L13 8" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="10" cy="10" r="8" stroke="#4ade80" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <div class="explainer-content">
+                        <h4>Safe (Green)</h4>
+                        <p>Normal activity - AI quickly identifies these as harmless and filters them out.</p>
+                    </div>
+                </div>
+                
+                <div class="explainer-item">
+                    <div class="explainer-icon threat">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 6V10M10 14H10.01" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18Z" stroke="#ef4444" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <div class="explainer-content">
+                        <h4>Threat (Red)</h4>
+                        <p>Suspicious activity detected - AI flags these for immediate human review.</p>
+                    </div>
+                </div>
+                
+                <div class="explainer-item">
+                    <div class="explainer-icon review">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 2C14.4183 2 18 5.58172 18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2Z" stroke="#fbbf24" stroke-width="2"/>
+                            <path d="M10 6V10L13 13" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="explainer-content">
+                        <h4>Review (Yellow)</h4>
+                        <p>Needs human judgment - unusual but not clearly malicious. Requires context and experience.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="comparison-grid">
+            <!-- AI Processor -->
+            <div class="processor-card ai">
+                <div class="processor-header">
+                    <div class="processor-label">System</div>
+                    <div class="processor-title">AI Processor</div>
+                    <p class="processor-description">Analyzes massive volumes at lightning speed, filtering noise and identifying patterns humans would miss.</p>
+                </div>
+                
+                <div class="stats-display">
+                    <div class="stat-row">
+                        <span class="stat-label">Alerts Processed</span>
+                        <span class="stat-value" id="ai-processed">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Processing Speed</span>
+                        <span class="stat-value small">5,000/sec</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Time Elapsed</span>
+                        <span class="stat-value small" id="ai-time">0.0s</span>
+                    </div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-label">Progress</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="ai-progress"></div>
+                    </div>
+                </div>
+                
+                <div class="alert-feed-label">Live Alert Feed</div>
+                <div class="alert-feed" id="ai-feed"></div>
+            </div>
+            
+            <!-- Human Processor -->
+            <div class="processor-card human">
+                <div class="processor-header">
+                    <div class="processor-label">Operator</div>
+                    <div class="processor-title">Human Analyst</div>
+                    <p class="processor-description">Reviews critical alerts flagged by AI, applying contextual understanding and strategic decision-making.</p>
+                </div>
+                
+                <div class="stats-display">
+                    <div class="stat-row">
+                        <span class="stat-label">Alerts Reviewed</span>
+                        <span class="stat-value" id="human-processed">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Review Speed</span>
+                        <span class="stat-value small">5/sec</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Time Elapsed</span>
+                        <span class="stat-value small" id="human-time">0.0s</span>
+                    </div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-label">Progress</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="human-progress"></div>
+                    </div>
+                </div>
+                
+                <div class="alert-feed-label">Review Activity</div>
+                <div class="alert-feed" id="human-feed"></div>
+            </div>
+        </div>
+        
+        <div class="demo-controls">
+            <button class="start-button" id="start-btn">Run Simulation</button>
+        </div>
+        
+        <div class="results-section" id="results">
+            <h3>The Result: Perfect Collaboration</h3>
+            <p>The AI processed 10,000 alerts in 2 seconds, filtering out routine noise and identifying patterns. The human analyst focused on 10 critical alerts flagged by the AI, using contextual understanding and strategic thinking to make the final calls. Together, they created a defense system that's both lightning-fast and intelligently precise.</p>
+            <div class="key-insight">AI Speed + Human Wisdom = Unbeatable Defense</div>
+        </div>
+    </div>
+    
+    <script>
+        const startBtn = document.getElementById('start-btn');
+        const aiProcessed = document.getElementById('ai-processed');
+        const humanProcessed = document.getElementById('human-processed');
+        const aiTime = document.getElementById('ai-time');
+        const humanTime = document.getElementById('human-time');
+        const aiProgress = document.getElementById('ai-progress');
+        const humanProgress = document.getElementById('human-progress');
+        const aiFeed = document.getElementById('ai-feed');
+        const humanFeed = document.getElementById('human-feed');
+        const results = document.getElementById('results');
+        
+        let aiCount = 0;
+        let humanCount = 0;
+        let timeElapsed = 0;
+        let isRunning = false;
+        
+        const aiThreats = [
+            'SAFE: Port scan from 192.168.1.45',
+            'SAFE: SSL certificate renewal',
+            'SAFE: Routine database backup',
+            'THREAT: Unusual outbound traffic detected',
+            'SAFE: User login from known location',
+            'SAFE: Software update installed',
+            'THREAT: Suspicious file execution attempt',
+            'SAFE: API request within normal range',
+            'SAFE: Email sent to internal team',
+            'REVIEW: New admin account created',
+        ];
+        
+        const humanReviews = [
+            'REVIEWING: Unusual outbound traffic',
+            'CONFIRMED: Legitimate admin action',
+            'REVIEWING: File execution pattern',
+            'ESCALATING: Potential data exfiltration',
+            'REVIEWING: Login anomaly',
+            'CONFIRMED: False positive cleared',
+            'REVIEWING: Privilege escalation attempt',
+            'INVESTIGATING: Network behavior change',
+            'CONFIRMED: Threat neutralized',
+            'DOCUMENTING: Incident report',
+        ];
+        
+        function addAlert(feed, message, type) {
+            const alert = document.createElement('div');
+            alert.className = `alert-item ${type}`;
+            alert.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            feed.appendChild(alert);
+            feed.scrollTop = feed.scrollHeight;
+        }
+        
+        function runSimulation() {
+            if (isRunning) return;
+            isRunning = true;
+            startBtn.disabled = true;
+            startBtn.textContent = 'Running...';
+            
+            // Reset
+            aiCount = 0;
+            humanCount = 0;
+            timeElapsed = 0;
+            aiFeed.innerHTML = '';
+            humanFeed.innerHTML = '';
+            results.classList.remove('show');
+            
+            // AI Processing (super fast)
+            const aiInterval = setInterval(() => {
+                if (aiCount >= 10000) {
+                    clearInterval(aiInterval);
+                    return;
+                }
+                
+                // Process 500 alerts per tick
+                aiCount += 500;
+                aiProcessed.textContent = aiCount.toLocaleString();
+                aiProgress.style.width = (aiCount / 10000 * 100) + '%';
+                
+                // Add random alert
+                const threat = aiThreats[Math.floor(Math.random() * aiThreats.length)];
+                const type = threat.startsWith('SAFE') ? 'safe' : threat.startsWith('THREAT') ? 'threat' : 'review';
+                addAlert(aiFeed, threat, type);
+                
+            }, 100);
+            
+            // Human Processing (slower, more deliberate)
+            const humanInterval = setInterval(() => {
+                if (humanCount >= 10) {
+                    clearInterval(humanInterval);
+                    return;
+                }
+                
+                humanCount += 1;
+                humanProcessed.textContent = humanCount;
+                humanProgress.style.width = (humanCount / 10 * 100) + '%';
+                
+                // Add review message
+                const review = humanReviews[humanCount - 1];
+                const type = review.startsWith('CONFIRMED') ? 'safe' : review.startsWith('ESCALATING') ? 'threat' : 'review';
+                addAlert(humanFeed, review, type);
+                
+            }, 200);
+            
+            // Time counter
+            const timeInterval = setInterval(() => {
+                timeElapsed += 0.1;
+                aiTime.textContent = timeElapsed.toFixed(1) + 's';
+                humanTime.textContent = timeElapsed.toFixed(1) + 's';
+                
+                if (aiCount >= 10000 && humanCount >= 10) {
+                    clearInterval(timeInterval);
+                    setTimeout(() => {
+                        results.classList.add('show');
+                        startBtn.disabled = false;
+                        startBtn.textContent = 'Run Again';
+                        isRunning = false;
+                    }, 500);
+                }
+            }, 100);
+        }
+        
+        startBtn.addEventListener('click', runSimulation);
+    </script>
+</body>
+</html>
