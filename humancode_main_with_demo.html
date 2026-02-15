@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HumanCode - Intelligence Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000000;
+            color: #e0e6ed;
+            overflow-x: hidden;
+        }
+        
+        /* Subtle background gradient */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 136, 255, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Header */
+        header {
+            padding: 2rem 0;
+            border-bottom: 1px solid rgba(0, 136, 255, 0.2);
+            position: sticky;
+            top: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0088ff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .logo::before {
+            content: '//';
+            color: rgba(0, 136, 255, 0.5);
+            margin-right: 0.5rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: #6b8daf;
+            text-decoration: none;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #0088ff;
+        }
+        
+        /* Hero intro section */
+        .hero-intro {
+            padding: 6rem 0 4rem;
+            text-align: center;
+        }
+        
+        .hero-intro h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #0088ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-intro p {
+            font-size: 1.2rem;
+            color: #6b8daf;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+        
+        /* Section styling */
+        section {
+            padding: 5rem 0;
+            border-bottom: 1px solid rgba(0, 136, 255, 0.1);
+        }
+        
+        .section-header {
+            margin-bottom: 3rem;
+        }
+        
+        .section-tag {
+            display: inline-block;
+            color: #0088ff;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: #ffffff;
+            margin-bottom: 1rem;
+        }
+        
+        .section-header p {
+            font-size: 1.1rem;
+            color: #6b8daf;
+            max-width: 700px;
+        }
+        
+        /* INTERACTIVE DEMO STYLES */
+        .demo-section {
+            padding: 5rem 0;
+            border-bottom: 1px solid rgba(0, 136, 255, 0.1);
+        }
+        
+        .explainer-section {
+            background: rgba(0, 136, 255, 0.05);
+            border: 1px solid rgba(0, 136, 255, 0.2);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .explainer-section h3 {
+            color: #0088ff;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .explainer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .explainer-item {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .explainer-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 136, 255, 0.15);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .explainer-icon.safe {
+            background: rgba(74, 222, 128, 0.15);
+        }
+        
+        .explainer-icon.threat {
+            background: rgba(239, 68, 68, 0.15);
+        }
+        
+        .explainer-icon.review {
+            background: rgba(251, 191, 36, 0.15);
+        }
+        
+        .explainer-content h4 {
+            color: #ffffff;
+            font-size: 0.95rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .explainer-content p {
+            color: #6b8daf;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .processor-card {
+            background: rgba(0, 136, 255, 0.03);
+            border: 1px solid rgba(0, 136, 255, 0.2);
+            border-radius: 8px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        
+        .processor-card:hover {
+            background: rgba(0, 136, 255, 0.05);
+        }
+        
+        .processor-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #0088ff, transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .processor-card:hover::before {
+            opacity: 1;
+        }
+        
+        .processor-header {
+            margin-bottom: 2rem;
+        }
+        
+        .processor-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            color: #0088ff;
+            margin-bottom: 0.5rem;
+        }
+        
+        .processor-title {
+            font-size: 1.5rem;
+            color: #ffffff;
+        }
+        
+        .processor-description {
+            color: #6b8daf;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-top: 0.5rem;
+        }
+        
+        .stats-display {
+            margin-bottom: 2rem;
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 136, 255, 0.1);
+        }
+        
+        .stat-label {
+            color: #6b8daf;
+            font-size: 0.9rem;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            color: #0088ff;
+        }
+        
+        .stat-value.small {
+            font-size: 1.2rem;
+        }
+        
+        .progress-container {
+            margin-top: 2rem;
+        }
+        
+        .progress-label {
+            color: #6b8daf;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 136, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #0088ff, #00d4ff);
+        }
+        
+        .alert-feed {
+            height: 200px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 136, 255, 0.2);
+            border-radius: 4px;
+            padding: 1rem;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.75rem;
+            margin-top: 1rem;
+        }
+        
+        .alert-feed-label {
+            color: #6b8daf;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .alert-item {
+            padding: 0.3rem 0;
+            opacity: 0;
+            animation: fadeIn 0.3s forwards;
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        .alert-item.safe {
+            color: #4ade80;
+        }
+        
+        .alert-item.threat {
+            color: #ef4444;
+        }
+        
+        .alert-item.review {
+            color: #fbbf24;
+        }
+        
+        .demo-controls {
+            text-align: center;
+            margin: 3rem 0;
+        }
+        
+        .start-button {
+            padding: 1.2rem 3rem;
+            background: transparent;
+            border: 2px solid #0088ff;
+            color: #0088ff;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .start-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: #0088ff;
+            transition: left 0.3s;
+            z-index: -1;
+        }
+        
+        .start-button:hover:not(:disabled) {
+            color: #000000;
+            box-shadow: 0 0 30px rgba(0, 136, 255, 0.5);
+        }
+        
+        .start-button:hover:not(:disabled)::before {
+            left: 0;
+        }
+        
+        .start-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .results-section {
+            background: linear-gradient(135deg, rgba(0, 136, 255, 0.08) 0%, rgba(0, 136, 255, 0.02) 100%);
+            border: 1px solid rgba(0, 136, 255, 0.2);
+            border-radius: 8px;
+            padding: 3rem;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s;
+        }
+        
+        .results-section.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .results-section h3 {
+            font-size: 2rem;
+            color: #ffffff;
+            margin-bottom: 1rem;
+        }
+        
+        .results-section p {
+            font-size: 1.1rem;
+            color: #6b8daf;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        .key-insight {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: rgba(0, 136, 255, 0.2);
+            border-radius: 6px;
+            color: #0088ff;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        /* Timeline Section */
+        .timeline-container {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 60px;
+            top: 40px;
+            bottom: -40px;
+            width: 2px;
+            background: linear-gradient(180deg, #0088ff 0%, rgba(0, 136, 255, 0.2) 100%);
+        }
+        
+        .timeline-item:last-child::before {
+            display: none;
+        }
+        
+        .timeline-year {
+            text-align: right;
+            padding-top: 0.5rem;
+        }
+        
+        .timeline-year h3 {
+            font-size: 2rem;
+            color: #0088ff;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-dot {
+            width: 12px;
+            height: 12px;
+            background: #0088ff;
+            border-radius: 50%;
+            position: absolute;
+            left: 54px;
+            top: 12px;
+            box-shadow: 0 0 20px rgba(0, 136, 255, 0.6);
+        }
+        
+        .timeline-content {
+            background: rgba(0, 136, 255, 0.05);
+            border: 1px solid rgba(0, 136, 255, 0.2);
+            border-radius: 8px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+        
+        .timeline-content:hover {
+            background: rgba(0, 136, 255, 0.08);
+            border-color: rgba(0, 136, 255, 0.4);
+            transform: translateX(10px);
+        }
+        
+        .timeline-content h4 {
+            font-size: 1.3rem;
+            color: #ffffff;
+            margin-bottom: 0.8rem;
+        }
+        
+        .timeline-content p {
+            color: #6b8daf;
+            line-height: 1.7;
+        }
+        
+        /* Partnership cards */
+        .partnership-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .partnership-card {
+            background: rgba(0, 136, 255, 0.03);
+            border: 1px solid rgba(0, 136, 255, 0.2);
+            border-radius: 8px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .partnership-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #0088ff, transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .partnership-card:hover {
+            background: rgba(0, 136, 255, 0.08);
+            border-color: rgba(0, 136, 255, 0.4);
+            transform: translateY(-5px);
+        }
+        
+        .partnership-card:hover::before {
+            opacity: 1;
+        }
+        
+        .card-label {
+            font-size: 0.75rem;
+            color: #0088ff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            display: block;
+        }
+        
+        .partnership-card h3 {
+            font-size: 1.4rem;
+            color: #ffffff;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .partnership-card p {
+            color: #6b8daf;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+        
+        .strength-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .strength-tag {
+            padding: 0.4rem 0.8rem;
+            background: rgba(0, 136, 255, 0.15);
+            border: 1px solid rgba(0, 136, 255, 0.3);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: #0088ff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Impact stories */
+        .story-grid {
+            display: grid;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .story-card {
+            background: linear-gradient(135deg, rgba(0, 136, 255, 0.08) 0%, rgba(0, 136, 255, 0.02) 100%);
+            border: 1px solid rgba(0, 136, 255, 0.2);
+            border-radius: 8px;
+            padding: 3rem;
+            position: relative;
+        }
+        
+        .story-year {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            font-size: 3rem;
+            font-weight: 700;
+            color: rgba(0, 136, 255, 0.2);
+        }
+        
+        .story-card h3 {
+            font-size: 1.6rem;
+            color: #ffffff;
+            margin-bottom: 1rem;
+        }
+        
+        .story-card p {
+            color: #6b8daf;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            max-width: 900px;
+        }
+        
+        .story-stat {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 0.6rem 1.2rem;
+            background: rgba(0, 136, 255, 0.2);
+            border-radius: 6px;
+            color: #0088ff;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        /* Learn section - educational guides */
+        .guide-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .guide-card {
+            background: rgba(0, 136, 255, 0.03);
+            border: 1px solid rgba(0, 136, 255, 0.2);
+            border-radius: 8px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+        
+        .guide-card:hover {
+            background: rgba(0, 136, 255, 0.08);
+            border-color: rgba(0, 136, 255, 0.4);
+            transform: translateY(-5px);
+        }
+        
+        .guide-card h4 {
+            font-size: 1.2rem;
+            color: #ffffff;
+            margin-bottom: 0.8rem;
+        }
+        
+        .guide-card p {
+            color: #6b8daf;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        /* News feed section */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .news-card {
+            background: rgba(0, 136, 255, 0.03);
+            border: 1px solid rgba(0, 136, 255, 0.2);
+            border-radius: 8px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+        
+        .news-card:hover {
+            background: rgba(0, 136, 255, 0.08);
+            border-color: rgba(0, 136, 255, 0.4);
+        }
+        
+        .news-date {
+            font-size: 0.75rem;
+            color: #0088ff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.8rem;
+        }
+        
+        .news-card h4 {
+            font-size: 1.1rem;
+            color: #ffffff;
+            margin-bottom: 0.8rem;
+        }
+        
+        .news-card p {
+            color: #6b8daf;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 4rem 0 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(0, 136, 255, 0.2);
+            margin-top: 5rem;
+        }
+        
+        footer p {
+            color: #6b8daf;
+            font-size: 0.85rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            list-style: none;
+        }
+        
+        .footer-links a {
+            color: #6b8daf;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: #0088ff;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .explainer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <div class="logo">HumanCode</div>
+                <ul class="nav-links">
+                    <li><a href="#demo">Demo</a></li>
+                    <li><a href="#timeline">Timeline</a></li>
+                    <li><a href="#partnership">Partnership</a></li>
+                    <li><a href="#learn">Learn</a></li>
+                </ul>
+            </nav>
+        </header>
+        
+        <div class="hero-intro">
+            <h1>The Intelligence Hub</h1>
+            <p>Explore how AI and human expertise combine to create the most sophisticated cybersecurity defense systems on the planet. From early pattern matching to neural networks, witness the evolution of digital protection.</p>
+        </div>
+        
+        <!-- INTERACTIVE DEMO SECTION -->
+        <section id="demo" class="demo-section">
+            <div class="section-header">
+                <div class="section-tag">// Interactive Demo</div>
+                <h2>AI vs Human: Speed Comparison</h2>
+                <p>Watch how AI and human analysts work together in real-time to protect against cybersecurity threats</p>
+            </div>
+            
+            <div class="explainer-section">
+                <h3>How This Works</h3>
+                <p style="color: #6b8daf; margin-bottom: 1.5rem;">In a real Security Operations Center (SOC), thousands of alerts come in every second. Here's what you'll see when you run the simulation:</p>
+                
+                <div class="explainer-grid">
+                    <div class="explainer-item">
+                        <div class="explainer-icon">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10 2L2 7L10 12L18 7L10 2Z" stroke="#0088ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 13L10 18L18 13" stroke="#0088ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="explainer-content">
+                            <h4>Alerts Processed</h4>
+                            <p>Security events detected across the network - could be logins, file changes, network traffic, etc.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="explainer-item">
+                        <div class="explainer-icon safe">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7 10L9 12L13 8" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="10" cy="10" r="8" stroke="#4ade80" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="explainer-content">
+                            <h4>Safe (Green)</h4>
+                            <p>Normal activity - AI quickly identifies these as harmless and filters them out.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="explainer-item">
+                        <div class="explainer-icon threat">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10 6V10M10 14H10.01" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18Z" stroke="#ef4444" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="explainer-content">
+                            <h4>Threat (Red)</h4>
+                            <p>Suspicious activity detected - AI flags these for immediate human review.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="explainer-item">
+                        <div class="explainer-icon review">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10 2C14.4183 2 18 5.58172 18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2Z" stroke="#fbbf24" stroke-width="2"/>
+                                <path d="M10 6V10L13 13" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="explainer-content">
+                            <h4>Review (Yellow)</h4>
+                            <p>Needs human judgment - unusual but not clearly malicious. Requires context and experience.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="comparison-grid">
+                <div class="processor-card ai">
+                    <div class="processor-header">
+                        <div class="processor-label">System</div>
+                        <div class="processor-title">AI Processor</div>
+                        <p class="processor-description">Analyzes massive volumes at lightning speed, filtering noise and identifying patterns humans would miss.</p>
+                    </div>
+                    
+                    <div class="stats-display">
+                        <div class="stat-row">
+                            <span class="stat-label">Alerts Processed</span>
+                            <span class="stat-value" id="ai-processed">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Processing Speed</span>
+                            <span class="stat-value small">5,000/sec</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Time Elapsed</span>
+                            <span class="stat-value small" id="ai-time">0.0s</span>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-container">
+                        <div class="progress-label">Progress</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="ai-progress"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert-feed-label">Live Alert Feed</div>
+                    <div class="alert-feed" id="ai-feed"></div>
+                </div>
+                
+                <div class="processor-card human">
+                    <div class="processor-header">
+                        <div class="processor-label">Operator</div>
+                        <div class="processor-title">Human Analyst</div>
+                        <p class="processor-description">Reviews critical alerts flagged by AI, applying contextual understanding and strategic decision-making.</p>
+                    </div>
+                    
+                    <div class="stats-display">
+                        <div class="stat-row">
+                            <span class="stat-label">Alerts Reviewed</span>
+                            <span class="stat-value" id="human-processed">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Review Speed</span>
+                            <span class="stat-value small">5/sec</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Time Elapsed</span>
+                            <span class="stat-value small" id="human-time">0.0s</span>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-container">
+                        <div class="progress-label">Progress</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="human-progress"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert-feed-label">Review Activity</div>
+                    <div class="alert-feed" id="human-feed"></div>
+                </div>
+            </div>
+            
+            <div class="demo-controls">
+                <button class="start-button" id="start-btn">Run Simulation</button>
+            </div>
+            
+            <div class="results-section" id="results">
+                <h3>The Result: Perfect Collaboration</h3>
+                <p>The AI processed 10,000 alerts in 2 seconds, filtering out routine noise and identifying patterns. The human analyst focused on 10 critical alerts flagged by the AI, using contextual understanding and strategic thinking to make the final calls. Together, they created a defense system that's both lightning-fast and intelligently precise.</p>
+                <div class="key-insight">AI Speed + Human Wisdom = Unbeatable Defense</div>
+            </div>
+        </section>
+        
+        <!-- Timeline Section -->
+        <section id="timeline">
+            <div class="section-header">
+                <div class="section-tag">// Evolution</div>
+                <h2>The AI Security Timeline</h2>
+                <p>Journey through the key milestones that shaped AI's role in cybersecurity</p>
+            </div>
+            
+            <div class="timeline-container">
+                <div class="timeline-item">
+                    <div class="timeline-year">
+                        <h3>2024</h3>
+                    </div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h4>LLM-Powered Security Operations</h4>
+                        <p>Large language models begin analyzing threat intelligence reports, generating security recommendations, and helping teams understand complex attack patterns. Security operations centers leverage AI to process millions of alerts and provide actionable insights at unprecedented speed.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-year">
+                        <h3>2020</h3>
+                    </div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h4>Deep Learning Malware Detection</h4>
+                        <p>Neural networks achieve 99%+ accuracy in identifying sophisticated malware variants, including zero-day threats. Deep learning models can now detect malicious code by understanding behavior patterns rather than just signatures, marking a major leap in proactive defense.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-year">
+                        <h3>2016</h3>
+                    </div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h4>AI-Driven SOC Platforms</h4>
+                        <p>First generation of AI-powered Security Operations Centers automate threat triage, incident response, and vulnerability management. What once took security teams hours now happens in minutes, with AI handling routine tasks while humans focus on strategic decisions.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-year">
+                        <h3>2012</h3>
+                    </div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h4>Machine Learning for Anomaly Detection</h4>
+                        <p>ML algorithms begin identifying unusual network behavior and user activities that traditional rule-based systems miss. This marks the shift from reactive to predictive security, where AI can spot threats before they fully materialize.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-year">
+                        <h3>2010</h3>
+                    </div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h4>ML-Based Intrusion Detection Systems</h4>
+                        <p>Intrusion detection and prevention systems adopt machine learning algorithms to identify anomalous network behavior. These systems learn normal patterns and flag deviations, dramatically reducing false positives compared to signature-based detection.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-year">
+                        <h3>2000</h3>
+                    </div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h4>Early AI in Email Filtering</h4>
+                        <p>Bayesian filters and basic machine learning techniques are deployed to combat spam and phishing emails. These early AI systems learn from user behavior to continuously improve accuracy, laying groundwork for future security AI.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Partnership Section -->
+        <section id="partnership">
+            <div class="section-header">
+                <div class="section-tag">// Synergy</div>
+                <h2>AI + Human: Better Together</h2>
+                <p>Complementary strengths that create unstoppable defense</p>
+            </div>
+            
+            <div class="partnership-grid">
+                <div class="partnership-card">
+                    <span class="card-label">System</span>
+                    <h3>AI Capabilities</h3>
+                    <p>AI processes millions of data points per second, detecting patterns across global threat landscapes that no human could spot. It never sleeps, never gets tired, and learns from every interaction.</p>
+                    <div class="strength-tags">
+                        <span class="strength-tag">24/7 Monitoring</span>
+                        <span class="strength-tag">Pattern Recognition</span>
+                        <span class="strength-tag">Speed</span>
+                        <span class="strength-tag">Scale</span>
+                    </div>
+                </div>
+                
+                <div class="partnership-card">
+                    <span class="card-label">Operator</span>
+                    <h3>Human Expertise</h3>
+                    <p>Humans provide strategic thinking, contextual understanding, and ethical judgment. We adapt to unprecedented situations, understand business impact, and make nuanced decisions that require empathy and experience.</p>
+                    <div class="strength-tags">
+                        <span class="strength-tag">Strategic Thinking</span>
+                        <span class="strength-tag">Context</span>
+                        <span class="strength-tag">Ethics</span>
+                        <span class="strength-tag">Creativity</span>
+                    </div>
+                </div>
+                
+                <div class="partnership-card">
+                    <span class="card-label">Outcome</span>
+                    <h3>The Result</h3>
+                    <p>Together, they don't just add—they multiply. Defense systems that combine AI speed with human wisdom create protection that neither could achieve alone. This is augmentation, not replacement.</p>
+                    <div class="strength-tags">
+                        <span class="strength-tag">10x Efficiency</span>
+                        <span class="strength-tag">Better Outcomes</span>
+                        <span class="strength-tag">Reduced Burnout</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Impact Stories -->
+        <section id="impact">
+            <div class="section-header">
+                <div class="section-tag">// Real Impact</div>
+                <h2>Success Stories</h2>
+                <p>How AI-human collaboration is changing cybersecurity</p>
+            </div>
+            
+            <div class="story-grid">
+                <div class="story-card">
+                    <div class="story-year">2024</div>
+                    <h3>Preventing a Nation-State Attack</h3>
+                    <p>An AI system detected subtle anomalies in network traffic patterns that human analysts had initially categorized as low-priority noise. The AI's continuous monitoring flagged the pattern three times over 48 hours, prompting deeper investigation by security researchers. Together, they discovered a sophisticated zero-day exploit being used by a nation-state actor. The collaboration between AI pattern recognition and human threat intelligence analysis prevented a breach that could have compromised critical infrastructure affecting millions of people.</p>
+                    <span class="story-stat">Response time: 6 hours vs typical 3+ days</span>
+                </div>
+                
+                <div class="story-card">
+                    <div class="story-year">2023</div>
+                    <h3>Transforming a Burnout Crisis</h3>
+                    <p>A mid-sized company's security operations center was facing a crisis: analysts were working 60+ hour weeks trying to keep up with 50,000+ daily security alerts. Team morale was at an all-time low, and they were still missing critical threats. After implementing AI-powered alert triage and automated response for routine incidents, the workload transformed overnight. AI now handles 95% of routine alerts, escalating only genuine threats that require human judgment. Analysts report higher job satisfaction, work normal hours, and the company is detecting threats faster than ever.</p>
+                    <span class="story-stat">Analyst burnout rate dropped from 73% to 12%</span>
+                </div>
+                
+                <div class="story-card">
+                    <div class="story-year">2022</div>
+                    <h3>Enterprise Security for Small Teams</h3>
+                    <p>A rural hospital network couldn't afford a full cybersecurity team but needed to protect sensitive patient data from increasingly sophisticated attacks. AI-powered security tools gave them 24/7 monitoring, automated threat detection, vulnerability scanning, and incident response capabilities—protection that would have required a team of 10+ specialists. With quarterly guidance from a human security advisor who tunes the AI systems and reviews incidents, they now have enterprise-grade security at a fraction of the cost. No patient data breaches in two years.</p>
+                    <span class="story-stat">Enterprise protection at 15% of traditional cost</span>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Learn Section -->
+        <section id="learn">
+            <div class="section-header">
+                <div class="section-tag">// Education</div>
+                <h2>Understanding AI in Cybersecurity</h2>
+                <p>Learn the fundamentals of how AI powers modern digital defense</p>
+            </div>
+            
+            <div class="guide-grid">
+                <div class="guide-card">
+                    <h4>What is AI Security?</h4>
+                    <p>AI in cybersecurity uses machine learning, neural networks, and data analysis to detect threats, automate responses, and predict attacks before they happen. It's the difference between reactive and proactive defense.</p>
+                </div>
+                
+                <div class="guide-card">
+                    <h4>How Does It Work?</h4>
+                    <p>AI systems learn from massive datasets of security incidents, malware samples, and network behavior. They identify patterns that indicate threats, often catching attacks that rule-based systems would miss entirely.</p>
+                </div>
+                
+                <div class="guide-card">
+                    <h4>Machine Learning Basics</h4>
+                    <p>ML algorithms improve through experience. In security, this means systems that get better at detecting threats over time, learning from every incident to become more accurate and effective.</p>
+                </div>
+                
+                <div class="guide-card">
+                    <h4>Threat Detection Methods</h4>
+                    <p>AI uses anomaly detection, behavioral analysis, pattern recognition, and predictive modeling to identify threats. It can spot zero-day attacks that have never been seen before.</p>
+                </div>
+                
+                <div class="guide-card">
+                    <h4>Why Human Oversight Matters</h4>
+                    <p>AI can process data faster than humans, but humans provide context, ethical judgment, and strategic thinking. The combination creates defense that's both intelligent and wise.</p>
+                </div>
+                
+                <div class="guide-card">
+                    <h4>The Future of Security Careers</h4>
+                    <p>AI isn't replacing security professionals—it's elevating them. New roles include AI security engineers, model trainers, and AI-human team coordinators who bridge both worlds.</p>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <p>// HumanCode © 2026 - Built to celebrate AI-human collaboration</p>
+            <ul class="footer-links">
+                <li><a href="#demo">Demo</a></li>
+                <li><a href="#timeline">Timeline</a></li>
+                <li><a href="#partnership">Partnership</a></li>
+                <li><a href="#learn">Learn</a></li>
+            </ul>
+            <p style="margin-top: 1.5rem; font-size: 0.8rem; opacity: 0.6;">The future is better when we build it together</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Interactive Demo Script
+        const startBtn = document.getElementById('start-btn');
+        const aiProcessed = document.getElementById('ai-processed');
+        const humanProcessed = document.getElementById('human-processed');
+        const aiTime = document.getElementById('ai-time');
+        const humanTime = document.getElementById('human-time');
+        const aiProgress = document.getElementById('ai-progress');
+        const humanProgress = document.getElementById('human-progress');
+        const aiFeed = document.getElementById('ai-feed');
+        const humanFeed = document.getElementById('human-feed');
+        const results = document.getElementById('results');
+        
+        let aiCount = 0;
+        let humanCount = 0;
+        let timeElapsed = 0;
+        let isRunning = false;
+        
+        const aiThreats = [
+            'SAFE: Port scan from 192.168.1.45',
+            'SAFE: SSL certificate renewal',
+            'SAFE: Routine database backup',
+            'THREAT: Unusual outbound traffic detected',
+            'SAFE: User login from known location',
+            'SAFE: Software update installed',
+            'THREAT: Suspicious file execution attempt',
+            'SAFE: API request within normal range',
+            'SAFE: Email sent to internal team',
+            'REVIEW: New admin account created',
+        ];
+        
+        const humanReviews = [
+            'REVIEWING: Unusual outbound traffic',
+            'CONFIRMED: Legitimate admin action',
+            'REVIEWING: File execution pattern',
+            'ESCALATING: Potential data exfiltration',
+            'REVIEWING: Login anomaly',
+            'CONFIRMED: False positive cleared',
+            'REVIEWING: Privilege escalation attempt',
+            'INVESTIGATING: Network behavior change',
+            'CONFIRMED: Threat neutralized',
+            'DOCUMENTING: Incident report',
+        ];
+        
+        function addAlert(feed, message, type) {
+            const alert = document.createElement('div');
+            alert.className = `alert-item ${type}`;
+            alert.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            feed.appendChild(alert);
+            feed.scrollTop = feed.scrollHeight;
+        }
+        
+        function runSimulation() {
+            if (isRunning) return;
+            isRunning = true;
+            startBtn.disabled = true;
+            startBtn.textContent = 'Running...';
+            
+            // Reset
+            aiCount = 0;
+            humanCount = 0;
+            timeElapsed = 0;
+            aiFeed.innerHTML = '';
+            humanFeed.innerHTML = '';
+            results.classList.remove('show');
+            
+            // AI Processing (super fast)
+            const aiInterval = setInterval(() => {
+                if (aiCount >= 10000) {
+                    clearInterval(aiInterval);
+                    return;
+                }
+                
+                aiCount += 500;
+                aiProcessed.textContent = aiCount.toLocaleString();
+                aiProgress.style.width = (aiCount / 10000 * 100) + '%';
+                
+                const threat = aiThreats[Math.floor(Math.random() * aiThreats.length)];
+                const type = threat.startsWith('SAFE') ? 'safe' : threat.startsWith('THREAT') ? 'threat' : 'review';
+                addAlert(aiFeed, threat, type);
+                
+            }, 100);
+            
+            // Human Processing (slower, more deliberate)
+            const humanInterval = setInterval(() => {
+                if (humanCount >= 10) {
+                    clearInterval(humanInterval);
+                    return;
+                }
+                
+                humanCount += 1;
+                humanProcessed.textContent = humanCount;
+                humanProgress.style.width = (humanCount / 10 * 100) + '%';
+                
+                const review = humanReviews[humanCount - 1];
+                const type = review.startsWith('CONFIRMED') ? 'safe' : review.startsWith('ESCALATING') ? 'threat' : 'review';
+                addAlert(humanFeed, review, type);
+                
+            }, 200);
+            
+            // Time counter
+            const timeInterval = setInterval(() => {
+                timeElapsed += 0.1;
+                aiTime.textContent = timeElapsed.toFixed(1) + 's';
+                humanTime.textContent = timeElapsed.toFixed(1) + 's';
+                
+                if (aiCount >= 10000 && humanCount >= 10) {
+                    clearInterval(timeInterval);
+                    setTimeout(() => {
+                        results.classList.add('show');
+                        startBtn.disabled = false;
+                        startBtn.textContent = 'Run Again';
+                        isRunning = false;
+                    }, 500);
+                }
+            }, 100);
+        }
+        
+        startBtn.addEventListener('click', runSimulation);
+    </script>
+</body>
+</html>
